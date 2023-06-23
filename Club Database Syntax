@@ -1,0 +1,256 @@
+/* CREATE TABLES SYNTAX */
+
+USE VP;
+
+CREATE TABLE STUDENTMAJOR ( 
+	MajorID Int NOT NULL, 
+	MajorName Char(50) NOT NULL,
+	CONSTRAINT STUDENTMAJOR_PK PRIMARY KEY(MajorID)
+	);
+
+CREATE TABLE SPONSOR ( 
+	SponsorID Int NOT NULL, 
+	SponsorFN Char(50) NOT NULL, 
+	SponsorLN Char(50) NOT NULL, 
+	CompanyName Char(100) NOT NULL,
+	Email Char(100) NOT NULL,
+	PhoneNumber Char(20) NOT NULL, 
+	CONSTRAINT SPONSOR_PK PRIMARY KEY(SponsorID)
+	);
+
+CREATE TABLE FUNDRAISERTYPE ( 
+	FundTypeID Int NOT NULL, 
+	FundName Char(50) NOT NULL, 
+	Description Char(100) NOT NULL,
+	CONSTRAINT FUNDRAISERTYPE_PK PRIMARY KEY(FundTypeID)
+	);
+
+CREATE TABLE STUDENT ( 
+	StudentID Int NOT NULL,
+	StudentFN Char(50) NOT NULL, 
+	StudentLN Char(50) NOT NULL, 
+	Email Char(100) NOT NULL,
+	Age Int NOT NULL,
+	MajorID Int NOT NULL, 
+	PhoneNumber Char(20) NOT NULL,
+	CONSTRAINT STUDENT_PK PRIMARY KEY(StudentID),
+	CONSTRAINT STUD_MAJORID_FK FOREIGN KEY(MajorID) REFERENCES STUDENTMAJOR (MajorID)
+	);
+
+CREATE TABLE CLADVISOR ( 
+	AdvisorID Int NOT NULL,
+	AdvisorFN Char(50) NOT NULL, 
+	AdvisorLN Char(50) NOT NULL, 
+	Email Char(100) NOT NULL,
+	CONSTRAINT CLADVISOR_PK PRIMARY KEY(AdvisorID) 
+	);
+
+CREATE TABLE CLACTIVITIES ( 
+	ActivityID Int NOT NULL,
+	Description Char(100) NOT NULL,
+	Date Date NOT NULL,
+	Participants Int NOT NULL,
+	CONSTRAINT CLACTIVITIES_PK PRIMARY KEY(ActivityID) 
+	);
+
+CREATE TABLE CLUB ( 
+	ClubID Int NOT NULL,
+	AdvisorID Int NOT NULL, 
+	ClubName Char(100) NOT NULL, 
+	Category Char(50) NOT NULL,
+	ActivityID Int NOT NULL,
+	CONSTRAINT CLUB_PK PRIMARY KEY(ClubID),
+	CONSTRAINT CLUB_ADVISORID_FK FOREIGN KEY (AdvisorID) REFERENCES CLADVISOR (AdvisorID),
+	CONSTRAINT CLUB_ACTIVITYID_FK FOREIGN KEY (ActivityID) REFERENCES CLACTIVITIES (ActivityID)
+	);
+
+CREATE TABLE FUNDRAISER ( 
+	FundraiserID Int NOT NULL,
+	ClubID Int NOT NULL,
+	SponsorID Int NOT NULL, 
+	FundTypeID Int NOT NULL, 
+	Date Date NOT NULL,
+	CONSTRAINT FUNDRAISER_PK PRIMARY KEY(FundraiserID),
+	CONSTRAINT FUNDRAISER_CLUBID_FK FOREIGN KEY (ClubID) REFERENCES CLUB (ClubID),
+	CONSTRAINT FUNDRAISER_SPONSORID_FK FOREIGN KEY (SponsorID) REFERENCES SPONSOR (SponsorID), 
+	CONSTRAINT FUNDRAISER_FUNDTYPEID_FK FOREIGN KEY (FundTypeID) REFERENCES FUNDRAISERTYPE (FundTypeID)
+	);
+
+CREATE TABLE STUDENTMEMBER ( 
+	MembershipID Int NOT NULL,
+	ClubID Int NOT NULL,
+	StudentID Int NOT NULL, 
+	StartDate Date NOT NULL, 
+	EndDate Date,
+	CONSTRAINT STUDENTMEMBER_PK PRIMARY KEY(MembershipID),
+	CONSTRAINT STUDENTMEMBER_CLUBID_FK FOREIGN KEY (ClubID) REFERENCES CLUB (ClubID),
+	CONSTRAINT STUDENTMEMBER_STUDENTID_FK FOREIGN KEY (StudentID) REFERENCES STUDENT (StudentID) 
+	);
+
+/* INSERT INTO VALUES SYNTAX */
+
+USE VP;
+
+/*****   STUDENTMAJOR DATA   ******************************************************/
+
+INSERT INTO STUDENTMAJOR (MajorID, MajorName)
+	VALUES('10', 'Computer Science');
+INSERT INTO STUDENTMAJOR VALUES (11, 'Public Health');
+INSERT INTO STUDENTMAJOR VALUES (12, 'Business Administration');
+INSERT INTO STUDENTMAJOR VALUES (13, 'Engineering');
+INSERT INTO STUDENTMAJOR VALUES (14, 'Psychology');
+INSERT INTO STUDENTMAJOR VALUES (15, 'Sociology');
+INSERT INTO STUDENTMAJOR VALUES (16, 'Digital Arts');
+INSERT INTO STUDENTMAJOR VALUES (17, 'Criminal Justice');
+INSERT INTO STUDENTMAJOR VALUES (18, 'Computer Information Systems');
+INSERT INTO STUDENTMAJOR VALUES (19, 'Biology');
+
+/*****  SPONSOR DATA   ********************************************************/
+
+INSERT INTO SPONSOR (SponsorID, SponsorFN, SponsorLN, CompanyName, Email, Phonenumber) 
+	VALUES(101,'Bret', 'Olson', 'PWC', 'Bolson@pwc.com', '258-9634');
+INSERT INTO SPONSOR VALUES(102, 'Monte', 'Valdez', 'Kroger', 'Mvaldez@Kroger.com', '963-8520');
+INSERT INTO SPONSOR VALUES(103, 'Leon', 'Avery', 'Walmart', 'Lavery@Walmart.com', '741-8529');
+INSERT INTO SPONSOR VALUES(104, 'Rose', 'Kelly', 'Ford', 'Rkelly@Ford.com', '852-7412');
+INSERT INTO SPONSOR VALUES(105, 'Sam', 'Ho', 'Audi', 'sho@Audi.com', '963-7410');
+INSERT INTO SPONSOR VALUES(106, 'Marco', 'Barber', 'Costco', 'Mbarber@Costco.com', '398-3657');
+INSERT INTO SPONSOR VALUES(107, 'Blaine', 'Carman', 'Petsmart', 'BCarman@Petsmart.com', '763-872');
+INSERT INTO SPONSOR VALUES(108, 'Summer', 'Donald', 'Ralphs', 'Sdonald@Ralphs.com', '350-8206');
+INSERT INTO SPONSOR VALUES(109, 'Luke', 'Rico', 'HomeGoods', 'Lrico@HomeGoods.com', '459-8836');
+INSERT INTO SPONSOR VALUES(110, 'Adrianna', 'Meyer', 'Ikea', 'Ameyer@Ikea.com', '578-3455');
+
+	
+/*****   FUNDRAISERTYPE DATA   *********************************************************/
+
+INSERT INTO FUNDRAISERTYPE (FundTypeID, FundName, Description)				
+	VALUES(1014870, 'Bottle Filler', 'Custom Water Bottle');
+INSERT INTO FUNDRAISERTYPE VALUES(1035231, 'Baked with Love', 'Bake Sale');
+INSERT INTO FUNDRAISERTYPE VALUES(1059822, 'PilipinX Culture Night', 'Concert Show');
+INSERT INTO FUNDRAISERTYPE VALUES(1073893,'CSUF Baseball Club Tournament', 'Baseball Tournament');
+INSERT INTO FUNDRAISERTYPE VALUES(1091284,'One Heart', 'Bracelet Fundraiser');
+INSERT INTO FUNDRAISERTYPE VALUES(1136823, 'Gallery of Talent', 'Art Exhibit and Auction');
+INSERT INTO FUNDRAISERTYPE VALUES(1328749, 'Band Battle', 'Concert');
+INSERT INTO FUNDRAISERTYPE VALUES(1513862, 'Family Fun Day', 'Carnival');
+INSERT INTO FUNDRAISERTYPE VALUES(1703846, 'Green and Clean', 'Trash Cleanup');
+INSERT INTO FUNDRAISERTYPE VALUES(1937290, 'CSUF Dodgeball Tournament', 'Dodgeball Tournament');
+
+	
+/*****   STUDENT DATA   ******************************************************/
+
+INSERT INTO STUDENT (StudentID, StudentFN, StudentLN, Email, Age, MajorID, PhoneNumber)
+	VALUES(1001, 'John', 'Smith', 'jsmith@csuf.edu', 22, 10, '123-4567');
+INSERT INTO STUDENT VALUES(1002, 'Olivia', 'Lee', 'olee@csuf.edu', 25, 11, '234-5678');
+INSERT INTO STUDENT VALUES(1003, 'Jasmine', 'Powers','jpowers@csuf.edu', 24, 12,'345-6789');
+INSERT INTO STUDENT VALUES(1004, 'Natasha', 'Smith', 'nsmith@csuf.edu', 25, 13, '034-5384');
+INSERT INTO STUDENT VALUES(1005, 'Jacob', 'Morris', 'jmorris@csuf.edu', 21, 10, '235-8543');
+INSERT INTO STUDENT VALUES(1006, 'Chris', 'Byrne', 'cbyrne@csuf.edu', 20, 11, '456-7890');
+INSERT INTO STUDENT VALUES(1007, 'Abby', 'Milligan', 'amilligan@csuf.edu', 19, 17, '567-8901');
+INSERT INTO STUDENT VALUES(1008, 'Lucas', 'Hawkins', 'lhawkins@csuf.edu', 21, 19, '678-9101');
+INSERT INTO STUDENT VALUES(1009, 'Melanie', 'Lopez', 'mlopez@csuf.edu', 18, 18, '789-1011');
+INSERT INTO STUDENT VALUES(1010, 'Eddie', 'Xu', 'exu@csuf.edu', 23, 16, '891-0112');
+
+/********  CLADVISOR DATA  **********************************************************/
+
+INSERT INTO CLADVISOR (AdvisorID, AdvisorFN, AdvisorLN, Email)
+	VALUES(401, 'Avery','Mitchell','a.mitchell@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(402, 'Allen', 'Parker', 'a.parker@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(403, 'Angelica', 'Hart', 'a-hart@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(404, 'Rowan', 'Bailey', 'r-bailey@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(405, 'Skylar', 'Roth', 's.roth@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(406, 'Marshall', 'Heath', 'm.heath@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(407, 'Guy', 'Curtis', 'g-curtis@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(408, 'Jessica', 'Watt', 'j-watt@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(409, 'Crystal', 'Garey', 'c.garey@fullerton.edu');
+INSERT INTO CLADVISOR VALUES(410, 'Lily', 'Edwards', 'l.edwards@fullerton.edu');
+
+
+/******** CLACTIVITIES DATA   **********************************************************/
+
+INSERT INTO CLACTIVITIES (ActivityID, Description, Date, Participants)
+	VALUES(800802, 'Data-analysis and statistical methods practice', '20230103', 10);
+INSERT INTO CLACTIVITIES VALUES(800803, 'Networking and guest speaking', '20230131', 15);
+INSERT INTO CLACTIVITIES VALUES(800804, 'Friendship Games and Pilipinx Culture Night', '20230204', 20);
+INSERT INTO CLACTIVITIES VALUES(800805, 'Baseball Tournaments', '20230228', 25);
+INSERT INTO CLACTIVITIES VALUES(800806, 'Volunteer training', '20230303', 5);
+INSERT INTO CLACTIVITIES VALUES(800807, 'Biology Lab Study Group', '20230408', 7);
+INSERT INTO CLACTIVITIES VALUES(800808, 'Ceramics for Beginners', '20230427', 8);
+INSERT INTO CLACTIVITIES VALUES(800809, 'Writing Workshop', '20230501', 3);
+INSERT INTO CLACTIVITIES VALUES(800810, 'Softball Tournaments', '20230519', 20);
+INSERT INTO CLACTIVITIES VALUES(800811, 'Museum Field Trip', '20230520', 35);
+
+/*********  CLUB DATA   ***************************************************************/
+
+INSERT INTO CLUB (ClubID, AdvisorID, ClubName, Category, ActivityID)
+	VALUES(990802, 401, 'Business and Data Analytics Club', 'Academic', 800802);
+INSERT INTO CLUB VALUES(990803, 402, 'Advertising Club', 'Special Interest', 800803);
+INSERT INTO CLUB VALUES(990804, 403, 'PASA', 'Cultural', 800804);
+INSERT INTO CLUB VALUES(990805, 404, 'Club Baseball', 'Sports', 800805);
+INSERT INTO CLUB VALUES(990806, 405, 'A Moment of Magic', 'Service', 800806);
+INSERT INTO CLUB VALUES(990807, 406, 'Bio Prodigy','Academic', 800807);
+INSERT INTO CLUB VALUES(990808, 407, 'Ceramic Dynamic', 'Special Interest', 800808);
+INSERT INTO CLUB VALUES(990809, 408, 'English is Fun', 'Academic',800809);
+INSERT INTO CLUB VALUES(990810, 409, 'Club Softball', 'Sports', 800810);
+INSERT INTO CLUB VALUES(990811, 410, 'Touring the World', 'Special Interest', 800811);
+
+
+/*********  FUNDRAISER DATA   ***************************************************************/
+
+INSERT INTO FUNDRAISER (FundraiserID, ClubID, SponsorID, FundTypeID, Date)
+	VALUES(1014877, 990802, 101, 1014870, '20230103');
+INSERT INTO FUNDRAISER VALUES(1035234, 990803, 102, 1035231, '20230131');
+INSERT INTO FUNDRAISER VALUES(1059823, 990804, 103, 1059822, '20230204');
+INSERT INTO FUNDRAISER VALUES(1073895, 990805, 104, 1073893, '20230228');
+INSERT INTO FUNDRAISER VALUES(1091289, 990806, 105, 1091284, '20230303');
+INSERT INTO FUNDRAISER VALUES(1116758, 990807, 106, 1136823, '20230408');
+INSERT INTO FUNDRAISER VALUES(1133845, 990808, 107, 1328749, '20230427');
+INSERT INTO FUNDRAISER VALUES(1152889, 990809, 108, 1513862, '20230501');
+INSERT INTO FUNDRAISER VALUES(1177645, 990810, 109, 1703846, '20230519');
+INSERT INTO FUNDRAISER VALUES(1193424, 990811, 110, 1937290, '20230520');
+
+
+
+/*********  STUDENTMEMBER DATA   ***************************************************************/
+
+INSERT INTO STUDENTMEMBER (MembershipID, ClubID, StudentID, StartDate, EndDate)
+	VALUES(9901, 990802, 1001, '20190827', '20221215');
+INSERT INTO STUDENTMEMBER VALUES(9902, 990803, 1002, '20200831', '19000101');
+INSERT INTO STUDENTMEMBER VALUES(9903, 990804, 1003, '20210202', '20220928');
+INSERT INTO STUDENTMEMBER VALUES(9904, 990805, 1004, '20220829', '19000101');
+INSERT INTO STUDENTMEMBER VALUES(9905, 990806, 1005, '20230131', '19000101');
+INSERT INTO STUDENTMEMBER VALUES(9906, 990807, 1006, '20220615', '19000101');
+INSERT INTO STUDENTMEMBER VALUES(9907, 990808, 1007, '20210219', '19000101');
+INSERT INTO STUDENTMEMBER VALUES(9908, 990809, 1008, '20220916', '19000101');
+INSERT INTO STUDENTMEMBER VALUES(9909, 990810, 1009, '20230914', '19000101');
+INSERT INTO STUDENTMEMBER VALUES(9910, 990811, 1010, '20200514', '20220427');
+
+/* VERIFICATION */
+
+USE VP;
+
+SELECT *
+FROM STUDENTMAJOR;
+
+SELECT *
+FROM SPONSOR;
+
+SELECT *
+FROM FUNDRAISERTYPE;
+
+SELECT *
+FROM STUDENT;
+
+SELECT *
+FROM CLADVISOR;
+
+SELECT *
+FROM CLACTIVITIES;
+
+SELECT *
+FROM CLUB;
+
+SELECT *
+FROM FUNDRAISER;
+
+SELECT *
+FROM STUDENTMEMBER;
+
